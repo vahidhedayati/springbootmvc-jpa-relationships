@@ -1,9 +1,8 @@
 package demo.jpa.relationships.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Author {
@@ -15,11 +14,18 @@ public class Author {
 
     private String name;
 
+    @ManyToMany(mappedBy = "authorsOfBook")
+    Set<Book> bookCollection = new HashSet<>();
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Book> getBookCollection() {
+        return bookCollection;
     }
 }
