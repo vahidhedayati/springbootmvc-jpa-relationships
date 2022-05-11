@@ -13,15 +13,8 @@ public class Book {
 
     private String name;
 
-    public Publisher getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name="publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
     @ManyToMany
@@ -42,6 +35,14 @@ public class Book {
 
     public Set<Author> getAuthorsOfBook() {
         return authorsOfBook;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public void addAuthor(Author author) {

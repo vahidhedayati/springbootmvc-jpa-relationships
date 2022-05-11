@@ -26,4 +26,8 @@ public class Publisher {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void addNewBook(Book book) {
+        this.publishedBooks.add(book);
+    }
 }
