@@ -3,9 +3,10 @@ package demo.jpa.relationships.service.impl;
 import demo.jpa.relationships.dto.AddAuthorDto;
 import demo.jpa.relationships.dto.AddAuthorToBook;
 import demo.jpa.relationships.entity.Author;
+import demo.jpa.relationships.entity.Book;
 import demo.jpa.relationships.repository.AuthorRepository;
-import demo.jpa.relationships.repository.BookRepository;
 import demo.jpa.relationships.service.AuthorService;
+import demo.jpa.relationships.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
     AuthorRepository authorRepository;
 
     @Autowired
-    BookRepository bookRepository;
+    BookService bookService;
 
     @Override
     public Map<String ,Object> assignAuthorToBook(Long authorId, Long bookId) {
@@ -29,10 +30,9 @@ public class AuthorServiceImpl implements AuthorService {
         List<FieldError> message = new ArrayList<>();
         if (authorFound.isPresent()) {
             Author author = authorFound.get();
-            Optional bookFound = bookRepository.findById(bookId);
-
+            Optional<Book> bookFound = bookService.findById(bookId);
             if (bookFound.isPresent()) {
-
+                addAuthorToBook(author, bookFound.get());
             } else {
                 message.add(new FieldError("author", "id", "author id was not found"));
                 result.put("error", message);
@@ -51,9 +51,10 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<Author> authorFound = findById(authorId);
         if (authorFound.isPresent()) {
             Author author = authorFound.get();
-            Optional bookFound = bookRepository.findById(bookId);
+            Optional<Book> bookFound = bookService.findById(bookId);
             if (bookFound.isPresent()) {
 
+                addAuthorToBook(author, bookFound.get());
             } else {
                 bindingResult.addError(new FieldError("author", "id", "book id was not found"));
                 result.put("error", bindingResult);
@@ -71,9 +72,9 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<Author> authorFound = findById(authorToBook.getAuthorId());
         if (authorFound.isPresent()) {
             Author author = authorFound.get();
-            Optional bookFound = bookRepository.findById(authorToBook.getBookId());
+            Optional<Book> bookFound = bookService.findById(authorToBook.getBookId());
             if (bookFound.isPresent()) {
-
+                addAuthorToBook(author, bookFound.get());
             } else {
                 bindingResult.addError(new FieldError("authorToBook", "bookId", "book id was not found"));
                 result.put("error", bindingResult);
@@ -85,6 +86,12 @@ public class AuthorServiceImpl implements AuthorService {
         }
         return result;
     }
+
+    private void   addAuthorToBook(Author author, Book book) {
+        book.addAuthor(author);
+        bookService.save(book);
+    }
+
     @Override
     public <S extends Author> S save(S entity) {
         return authorRepository.save(entity);

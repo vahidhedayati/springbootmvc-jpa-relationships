@@ -64,7 +64,7 @@ public class AuthorController {
         Map<String ,Object> result =  authorService.assignAuthorToBook(authorId,bookId);
         List<FieldError> errors = ( List<FieldError>) result.get("error");
         RestResponseBody restResponseBody = new RestResponseBody();
-        if (errors.size()>0) {
+        if (errors !=null && errors.size()>0) {
             restResponseBody.setMsg(errors
                     .stream()
                     .map(x -> x.getDefaultMessage())
@@ -84,7 +84,7 @@ public class AuthorController {
         Map<String ,Object> result =  authorService.assignAuthorToBook(authorId,bookId,bindingResult);
         BindingResult errors = (BindingResult) result.get("error");
         RestResponseBody restResponseBody = new RestResponseBody();
-        if (errors.hasErrors()) {
+        if (errors !=null && errors.hasErrors()) {
             restResponseBody.setMsg(errors.getAllErrors()
                     .stream()
                     .map(x -> x.getDefaultMessage())
@@ -104,7 +104,8 @@ public class AuthorController {
         Map<String ,Object> result =  authorService.assignAuthorToBook(authorToBook,bindingResult);
         BindingResult errors = (BindingResult) result.get("error");
         RestResponseBody restResponseBody = new RestResponseBody();
-        if (errors.hasErrors()) {
+        if (errors !=null && errors.hasErrors()) {
+
             restResponseBody.setMsg(errors.getAllErrors()
                     .stream()
                     .map(x -> x.getDefaultMessage())

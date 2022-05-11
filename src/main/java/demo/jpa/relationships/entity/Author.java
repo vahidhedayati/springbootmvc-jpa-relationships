@@ -1,5 +1,7 @@
 package demo.jpa.relationships.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +16,7 @@ public class Author {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authorsOfBook")
     Set<Book> bookCollection = new HashSet<>();
 

@@ -13,6 +13,17 @@ public class Book {
 
     private String name;
 
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Publisher publisher;
+
     @ManyToMany
     @JoinTable(
             name="book_author",
@@ -31,5 +42,9 @@ public class Book {
 
     public Set<Author> getAuthorsOfBook() {
         return authorsOfBook;
+    }
+
+    public void addAuthor(Author author) {
+        this.authorsOfBook.add(author);
     }
 }
